@@ -1,2 +1,2 @@
 # Taskly
-Built a simple ToDo application with VueJs and FastAPI
+A ToDo app built with FastAPI, VueJS, and PostgreSQL
