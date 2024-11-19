@@ -38,7 +38,7 @@ def update_task(task_id: int, task: schemas.TaskUpdate, db: Session = Depends(ge
 
   return updated_task
 
-@router.delete("/tasks/{task_id}", response_model=schemas.TaskResponse)
+@router.delete("/tasks/{task_id}")
 def delete_task(task_id: int, db: Session = Depends(get_db)):
   db_task = crud.get_task(db, task_id)
   if not db_task:
@@ -46,6 +46,6 @@ def delete_task(task_id: int, db: Session = Depends(get_db)):
         status_code=404, 
         detail="Task doesn't exist and cannot be deleted"
       )
-  deleted_task = crud.delete_task(db, task_id)
+  crud.delete_task(db, task_id)
 
-  return deleted_task
+  return {"detail": "Task has been successfully deleted"}
