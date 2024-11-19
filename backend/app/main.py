@@ -1,7 +1,6 @@
 from fastapi import FastAPI
+from app.routes import task
 
 app = FastAPI()
 
-@app.get("/")
-def read_root():
-  return {"message": "Hello, Taskly with FastAPI!"}
+app.include_router(task.router, prefix="", tags=["tasks"])
