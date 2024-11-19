@@ -6,6 +6,7 @@
       :task="task"
       @delete="onDelete"
       @toggle="onToggle"
+      @click="onTaskClick(task)"
     />
   </div>
 </template>
@@ -24,6 +25,9 @@ export default {
     },
     onToggle(id) {
       this.$emit('toggle', id);
+    },
+    onTaskClick(task) {
+      this.$emit('edit', task);
     },
   }
 };

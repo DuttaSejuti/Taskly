@@ -1,7 +1,7 @@
 <template>
   <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
     <div class="bg-white p-6 rounded shadow-md max-w-sm w-full">
-      <h2 class="text-xl font-bold mb-4">Create Task</h2>
+      <h2 class="text-xl font-bold mb-4">{{ task.id ? 'Edit Task' : 'Create Task' }}</h2>
       <form @submit.prevent="onSave">
         <div class="mb-4">
           <label class="block mb-1 font-semibold">Title</label>
@@ -42,10 +42,8 @@
 
 <script>
 export default {
-  data() {
-    return {
-      task: {},
-    };
+  props: {
+    task: Object,
   },
   methods: {
     onSave() {

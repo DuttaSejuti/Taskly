@@ -8,11 +8,13 @@
         :tasks="tasks"
         @delete="deleteTask"
         @toggle="toggleCheckbox"
+        @edit="openModal"
       />
     </div>
 
     <TaskModal
       v-if="isModalOpen"
+      :task="modalTask"
       @save="saveTask"
       @cancel="closeModal"
     />
@@ -35,6 +37,7 @@ export default {
     return {
       tasks: [],
       isModalOpen: false,
+      modalTask: { id: null, title: '', description: '' },
     };
   },
   methods: {
@@ -46,21 +49,37 @@ export default {
         console.error('Error fetching tasks:', error);
       }
     },
-    openModal() {
+    openModal(task) {
       this.isModalOpen = true;
+      if (task) {
+        this.modalTask = { ...task };
+      } else {
+        this.modalTask = { id: null, title: '', description: '' };
+      }
     },
     closeModal() {
       this.isModalOpen = false;
     },
     async saveTask(task) {
+      if (task.id) {
+        this.updateTask(task);
+        return
+      }
       try {
-        const response = await apiClient.post('/tasks', {
-          ...task,
-        });
+        const response = await apiClient.post('/tasks', { ...task });
         this.tasks.push(response.data);
         this.closeModal();
       } catch (error) {
         console.error('Error saving task:', error);
+      }
+    },
+    async updateTask(task) {
+      try {
+        const response = await apiClient.put(`/tasks/${task.id}`, { ...task });
+        this.tasks = this.tasks.map((t) => t.id === task.id ? response.data : t);
+        this.closeModal();
+      } catch (error) {
+        console.error('Error updating task:', error);
       }
     },
     async deleteTask(id) {
