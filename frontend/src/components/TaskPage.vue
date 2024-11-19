@@ -7,6 +7,7 @@
       <TaskList
         :tasks="tasks"
         @delete="deleteTask"
+        @toggle="toggleCheckbox"
       />
     </div>
 
@@ -68,6 +69,17 @@ export default {
         this.tasks = this.tasks.filter((task) => task.id !== id);
       } catch (error) {
         console.error('Error deleting task:', error);
+      }
+    },
+    async toggleCheckbox(id) {
+      const task = this.tasks.find((task) => task.id === id);
+      if (task) {
+        try {
+          await apiClient.put(`/tasks/${id}`, { is_completed: !task.is_completed });
+          task.is_completed = !task.is_completed;
+        } catch (error) {
+          console.error('Error updating task:', error);
+        }
       }
     },
   },

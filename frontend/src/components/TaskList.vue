@@ -5,6 +5,7 @@
       :key="task.id"
       :task="task"
       @delete="onDelete"
+      @toggle="onToggle"
     />
   </div>
 </template>
@@ -20,7 +21,10 @@ export default {
   methods: {
     onDelete(id) {
       this.$emit('delete', id);
-    }
+    },
+    onToggle(id) {
+      this.$emit('toggle', id);
+    },
   }
 };
 </script>
