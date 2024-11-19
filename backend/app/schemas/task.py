@@ -12,5 +12,8 @@ class TaskBase(BaseModel):
 class TaskCreate(TaskBase):
   title: str
 
+class TaskUpdate(TaskBase):
+  pass
+
 class TaskResponse(TaskBase):
   id: int

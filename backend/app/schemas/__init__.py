@@ -1,1 +1,1 @@
-from app.schemas.task import TaskBase, TaskCreate, TaskResponse
+from app.schemas.task import TaskBase, TaskCreate, TaskUpdate, TaskResponse
