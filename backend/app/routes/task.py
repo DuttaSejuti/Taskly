@@ -37,3 +37,15 @@ def update_task(task_id: int, task: schemas.TaskUpdate, db: Session = Depends(ge
   updated_task = crud.update_task(db, task_id, task)
 
   return updated_task
+
+@router.delete("/tasks/{task_id}", response_model=schemas.TaskResponse)
+def delete_task(task_id: int, db: Session = Depends(get_db)):
+  db_task = crud.get_task(db, task_id)
+  if not db_task:
+    raise HTTPException(
+        status_code=404, 
+        detail="Task doesn't exist and cannot be deleted"
+      )
+  deleted_task = crud.delete_task(db, task_id)
+
+  return deleted_task
