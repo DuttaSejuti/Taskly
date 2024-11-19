@@ -4,6 +4,7 @@
       v-for="task in tasks"
       :key="task.id"
       :task="task"
+      @delete="onDelete"
     />
   </div>
 </template>
@@ -16,5 +17,10 @@ export default {
   props: {
     tasks: Array,
   },
+  methods: {
+    onDelete(id) {
+      this.$emit('delete', id);
+    }
+  }
 };
 </script>

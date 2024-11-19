@@ -6,6 +6,7 @@
       />
       <TaskList
         :tasks="tasks"
+        @delete="deleteTask"
       />
     </div>
 
@@ -59,6 +60,14 @@ export default {
         this.closeModal();
       } catch (error) {
         console.error('Error saving task:', error);
+      }
+    },
+    async deleteTask(id) {
+      try {
+        await apiClient.delete(`/tasks/${id}`);
+        this.tasks = this.tasks.filter((task) => task.id !== id);
+      } catch (error) {
+        console.error('Error deleting task:', error);
       }
     },
   },
