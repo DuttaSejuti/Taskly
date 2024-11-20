@@ -1,11 +1,15 @@
 <template>
   <div class="min-h-screen bg-gray-100 p-6">
     <div class="max-w-2xl mx-auto">
-      <Header
-        @create="openModal"
+      <Header @create="openModal" />
+      <input
+        v-model="searchQuery"
+        type="text"
+        placeholder="Search tasks..."
+        class="w-full p-2 mb-4 border rounded"
       />
       <TaskList
-        :tasks="tasks"
+        :tasks="filteredTasks"
         @delete="deleteTask"
         @toggle="toggleCheckbox"
         @edit="openModal"
@@ -38,7 +42,18 @@ export default {
       tasks: [],
       isModalOpen: false,
       modalTask: { id: null, title: '', description: '' },
+      searchQuery: '',
     };
+  },
+  computed: {
+    filteredTasks() {
+      const query = this.searchQuery.toLowerCase();
+      return this.tasks.filter(
+        (task) =>
+          task.title.toLowerCase().includes(query) ||
+          task.description.toLowerCase().includes(query)
+      );
+    },
   },
   methods: {
     async fetchTasks() {
@@ -63,7 +78,7 @@ export default {
     async saveTask(task) {
       if (task.id) {
         this.updateTask(task);
-        return
+        return;
       }
       try {
         const response = await apiClient.post('/tasks', { ...task });
