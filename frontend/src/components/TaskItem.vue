@@ -1,7 +1,8 @@
 <template>
-  <div class="flex justify-between items-center bg-white p-4 rounded shadow-md hover:bg-gray-50"
-    @click="$emit('click')"
-    >
+  <div
+    class="flex justify-between items-center bg-white p-4 rounded shadow-md hover:bg-gray-50"
+    @click="emitClick"
+  >
     <div class="flex items-center">
       <input
         type="checkbox"
@@ -30,18 +31,15 @@
   </div>
 </template>
 
-<script>
-export default {
-  props: {
-    task: Object,
-  },
-  methods: {
-    deleteTask() {
-      this.$emit('delete', this.task.id);
-    },
-    toggleCheckbox() {
-      this.$emit('toggle', this.task.id);
-    }
-  }
-};
+<script setup>
+const props = defineProps({
+  task: Object,
+});
+
+const emit = defineEmits(['click', 'delete', 'toggle']);
+
+const emitClick = () => emit('click');
+const deleteTask = () => emit('delete', props.task.id);
+const toggleCheckbox = () => emit('toggle', props.task.id);
+
 </script>

@@ -25,100 +25,89 @@
   </div>
 </template>
 
-<script>
+<script setup>
+import { ref, computed } from 'vue';
 import Header from '@/components/Header.vue';
 import TaskList from '@/components/TaskList.vue';
 import TaskModal from '@/components/TaskModal.vue';
 import apiClient from '@/client/axios.ts';
 
-export default {
-  components: {
-    Header,
-    TaskList,
-    TaskModal,
-  },
-  data() {
-    return {
-      tasks: [],
-      isModalOpen: false,
-      modalTask: { id: null, title: '', description: '' },
-      searchQuery: '',
-    };
-  },
-  computed: {
-    filteredTasks() {
-      const query = this.searchQuery.toLowerCase();
-      return this.tasks.filter(
-        (task) =>
-          task.title.toLowerCase().includes(query) ||
-          task.description.toLowerCase().includes(query)
-      );
-    },
-  },
-  methods: {
-    async fetchTasks() {
-      try {
-        const response = await apiClient.get('/tasks');
-        this.tasks = response.data;
-      } catch (error) {
-        console.error('Error fetching tasks:', error);
-      }
-    },
-    openModal(task) {
-      this.isModalOpen = true;
-      if (task) {
-        this.modalTask = { ...task };
-      } else {
-        this.modalTask = { id: null, title: '', description: '' };
-      }
-    },
-    closeModal() {
-      this.isModalOpen = false;
-    },
-    async saveTask(task) {
-      if (task.id) {
-        this.updateTask(task);
-        return;
-      }
-      try {
-        const response = await apiClient.post('/tasks', { ...task });
-        this.tasks.push(response.data);
-        this.closeModal();
-      } catch (error) {
-        console.error('Error saving task:', error);
-      }
-    },
-    async updateTask(task) {
-      try {
-        const response = await apiClient.put(`/tasks/${task.id}`, { ...task });
-        this.tasks = this.tasks.map((t) => t.id === task.id ? response.data : t);
-        this.closeModal();
-      } catch (error) {
-        console.error('Error updating task:', error);
-      }
-    },
-    async deleteTask(id) {
-      try {
-        await apiClient.delete(`/tasks/${id}`);
-        this.tasks = this.tasks.filter((task) => task.id !== id);
-      } catch (error) {
-        console.error('Error deleting task:', error);
-      }
-    },
-    async toggleCheckbox(id) {
-      const task = this.tasks.find((task) => task.id === id);
-      if (task) {
-        try {
-          await apiClient.put(`/tasks/${id}`, { is_completed: !task.is_completed });
-          task.is_completed = !task.is_completed;
-        } catch (error) {
-          console.error('Error updating task:', error);
-        }
-      }
-    },
-  },
-  created() {
-    this.fetchTasks();
-  },
+const tasks = ref([]);
+const isModalOpen = ref(false);
+const modalTask = ref({ id: null, title: '', description: '' });
+const searchQuery = ref('');
+
+const filteredTasks = computed(() => {
+  const query = searchQuery.value.toLowerCase();
+  return tasks.value.filter(
+    (task) =>
+      task.title.toLowerCase().includes(query) ||
+      task.description.toLowerCase().includes(query)
+  );
+});
+
+const fetchTasks = async () => {
+  try {
+    const response = await apiClient.get('/tasks');
+    tasks.value = response.data;
+  } catch (error) {
+    console.error('Error fetching tasks:', error);
+  }
 };
+
+const openModal = (task) => {
+  isModalOpen.value = true;
+  modalTask.value = task ? { ...task } : { id: null, title: '', description: '' };
+};
+
+const closeModal = () => {
+  isModalOpen.value = false;
+};
+
+const saveTask = async (task) => {
+  if (task.id) {
+    updateTask(task);
+    return;
+  }
+  try {
+    const response = await apiClient.post('/tasks', { ...task });
+    tasks.value.push(response.data);
+    closeModal();
+  } catch (error) {
+    console.error('Error saving task:', error);
+  }
+};
+
+const updateTask = async (task) => {
+  try {
+    const response = await apiClient.put(`/tasks/${task.id}`, { ...task });
+    tasks.value = tasks.value.map((t) => (t.id === task.id ? response.data : t));
+    closeModal();
+  } catch (error) {
+    console.error('Error updating task:', error);
+  }
+};
+
+const deleteTask = async (id) => {
+  try {
+    await apiClient.delete(`/tasks/${id}`);
+    tasks.value = tasks.value.filter((task) => task.id !== id);
+  } catch (error) {
+    console.error('Error deleting task:', error);
+  }
+};
+
+const toggleCheckbox = async (id) => {
+  const task = tasks.value.find((task) => task.id === id);
+  if (task) {
+    try {
+      await apiClient.put(`/tasks/${id}`, { is_completed: !task.is_completed });
+      task.is_completed = !task.is_completed;
+    } catch (error) {
+      console.error('Error updating task:', error);
+    }
+  }
+};
+
+fetchTasks();
 </script>

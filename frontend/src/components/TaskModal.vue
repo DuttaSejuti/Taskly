@@ -23,7 +23,7 @@
         <div class="flex justify-end space-x-4">
           <button
             type="button"
-            @click="$emit('cancel')"
+            @click="onCancel"
             class="bg-gray-300 px-4 py-2 rounded hover:bg-gray-400"
           >
             Cancel
@@ -40,15 +40,14 @@
   </div>
 </template>
 
-<script>
-export default {
-  props: {
-    task: Object,
-  },
-  methods: {
-    onSave() {
-      this.$emit('save', this.task);
-    },
-  },
-};
+<script setup>
+const props = defineProps({
+  task: Object,
+})
+
+const emit = defineEmits(['save', 'cancel'])
+
+const onSave = () => emit('save', props.task);
+const onCancel = () => emit('cancel');
+
 </script>

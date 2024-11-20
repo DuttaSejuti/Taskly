@@ -11,24 +11,17 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import TaskItem from './TaskItem.vue';
 
-export default {
-  components: { TaskItem },
-  props: {
-    tasks: Array,
-  },
-  methods: {
-    onDelete(id) {
-      this.$emit('delete', id);
-    },
-    onToggle(id) {
-      this.$emit('toggle', id);
-    },
-    onTaskClick(task) {
-      this.$emit('edit', task);
-    },
-  }
-};
+defineProps({
+  tasks: Array
+});
+
+const emit = defineEmits(['delete', 'toggle', 'edit']);
+
+const onDelete = (id) => emit('delete', id);
+const onToggle = (id) => emit('toggle', id);
+const onTaskClick = (task) => emit('edit', task);
+
 </script>
