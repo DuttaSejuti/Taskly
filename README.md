@@ -33,7 +33,7 @@ To run Taskly locally, follow the following instructions
 
 5. ⚠️ **[Optional Troubleshooting]** 
 
-    While running the `docker-compose up --build` if you get any error creating the fronend service regarding the `rollup-linux-arm64-musl`, try running the following command
+    While running the `docker-compose up --build` if you get any error creating the fronend service regarding the `rollup-linux-arm64-musl` / `module not found`, try running the following command
     ```bash
     docker compose run frontend npm i && docker compose up
     ```

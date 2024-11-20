@@ -1,18 +1,18 @@
 <template>
   <button
-    @click="$emit('click')"
+    @click="emitClick"
     class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
   >
-    {{ buttonLabel}}
+    {{ buttonLabel }}
   </button>
 </template>
 
-<script>
-export default {
-  props: {
-    buttonLabel: {
-      type: String
-    },
-  },
-};
+<script setup>
+defineProps({
+  buttonLabel: String
+});
+
+const emit = defineEmits(['click']);
+
+const emitClick = () => emit('click');
 </script>
