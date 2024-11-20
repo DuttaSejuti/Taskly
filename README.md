@@ -1,5 +1,5 @@
 # Taskly 📔 
-Takly is a simple ToDo app built with FastAPI, VueJS, and PostgreSQL with Docker. User can create, update, delete, and search their tasks.
+Taskly is a simple ToDo app built with FastAPI, VueJS, and PostgreSQL with Docker. User can create, update, delete, and search their tasks.
 
 ## Prerequisites
 
