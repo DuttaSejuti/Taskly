@@ -1,12 +1,13 @@
 <template>
-  <div
-    class="flex justify-between items-center bg-white p-4 rounded shadow-md hover:bg-gray-50"
-  >
+  <div class="flex justify-between items-center bg-white p-4 rounded shadow-md hover:bg-gray-50"
+    @click="$emit('click')"
+    >
     <div class="flex items-center">
       <input
         type="checkbox"
         class="mr-3 w-5 h-5"
         :checked="task.is_completed"
+        @click.stop
         @change="toggleCheckbox"
       />
       <div>
@@ -20,7 +21,7 @@
     </div>
 
     <button
-      @click="deleteTask"
+      @click.stop="deleteTask"
       class="text-red-500 hover:text-red-700"
       title="Delete Task"
     >
