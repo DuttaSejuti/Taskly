@@ -67,3 +67,11 @@ docker stop [container-name]
 docker logs [container-name]
 docker inspect [container-name]
 ```
+
+### Improvement Ideas
+
+- Filter based on complete/incomplete tasks
+- Improve search incorporating backend and database
+- Confirmation modal while deleting a task (Are you sure?)
+- Showing Banner/alert after creating, updating, deleting a task (successful banner)
+- Writing Tests
